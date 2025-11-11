@@ -1,0 +1,187 @@
+<div class="statistics-container">
+  <!-- Header -->
+  <div class="header">
+    <h1 class="title">
+      <i class="bi bi-graph-up me-2"></i>
+      Estadísticas del Sistema
+    </h1>
+    <p class="subtitle">Resumen general de ingresos y movimientos</p>
+  </div>
+
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+    <p class="mt-3 text-muted">Cargando estadísticas...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="hasError && !isLoading" class="alert alert-danger text-center">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    Error al cargar las estadísticas. Por favor, intente nuevamente.
+    <button class="btn btn-sm btn-outline-danger ms-2" (click)="reloadAll()">
+      <i class="bi bi-arrow-clockwise"></i> Reintentar
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <div *ngIf="!isLoading && !hasError" class="filters-card">
+    <div class="filter-header">
+      <h5><i class="bi bi-funnel me-2"></i>Filtros de Fecha</h5>
+      <div class="filter-actions">
+        <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">
+          <i class="bi bi-arrow-clockwise me-1"></i> Limpiar
+        </button>
+        <button class="btn btn-sm btn-primary" (click)="applyFilters()">
+          <i class="bi bi-search me-1"></i> Aplicar
+        </button>
+      </div>
+    </div>
+    <div class="filter-body">
+      <div class="row g-3">
+        <div class="col-md-5">
+          <label class="form-label">Desde</label>
+          <input type="date" class="form-control" [(ngModel)]="dateRange.desde">
+        </div>
+        <div class="col-md-5">
+          <label class="form-label">Hasta</label>
+          <input type="date" class="form-control" [(ngModel)]="dateRange.hasta">
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button class="btn btn-success w-100" (click)="generateExcelReport()" [disabled]="isGeneratingReport">
+            <span *ngIf="isGeneratingReport" class="spinner-border spinner-border-sm me-1"></span>
+            <i class="bi bi-file-excel me-1"></i> Exportar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estadísticas principales -->
+  <div *ngIf="!isLoading && !hasError" class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon income">
+        <i class="bi bi-wallet2"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-title">Ingresos Hoy</h3>
+        <p class="stat-value">S/ {{ stats.todayIncome | number: '1.2-2' }}</p>
+        <span class="stat-desc">Total del día</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon monthly">
+        <i class="bi bi-calendar2-check"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-title">Ingresos Mensuales</h3>
+        <p class="stat-value">S/ {{ stats.monthlyIncome | number: '1.2-2' }}</p>
+        <span class="stat-desc">Total del mes</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon merchants">
+        <i class="bi bi-people"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-title">Comerciantes</h3>
+        <p class="stat-value">{{ stats.totalMerchants || 0 }}</p>
+        <span class="stat-desc">Registrados</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon movements">
+        <i class="bi bi-arrow-left-right"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-title">Movimientos</h3>
+        <p class="stat-value">{{ stats.totalMovements || 0 }}</p>
+        <span class="stat-desc">Hoy</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráficos principales -->
+  <div *ngIf="!isLoading && !hasError" class="charts-grid">
+    <!-- Gráfico de ingresos -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3 class="chart-title">Comparación de Ingresos</h3>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart
+                [data]="incomeChartData"
+                [options]="incomeChartOptions"
+                [type]="incomeChartType">
+        </canvas>
+      </div>
+    </div>
+
+    <!-- Gráfico de ganancias -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3 class="chart-title">Análisis de Ganancias</h3>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart
+                [data]="profitChartData"
+                [options]="profitChartOptions"
+                [type]="profitChartType">
+        </canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estadísticas detalladas -->
+  <div *ngIf="!isLoading && !hasError" class="detailed-stats">
+    <!-- Por especie -->
+    <div class="detail-card">
+      <div class="detail-header">
+        <h4><i class="bi bi-tags me-2"></i>Ingresos por Especie</h4>
+      </div>
+      <div class="detail-body">
+        <div class="row">
+          <div class="col-md-6">
+            <canvas baseChart
+                    [data]="speciesChartData"
+                    [options]="speciesChartOptions"
+                    [type]="speciesChartType"
+                    height="250">
+            </canvas>
+          </div>
+          <div class="col-md-6">
+            <div class="stats-list">
+              <div *ngFor="let item of speciesStats" class="stat-item">
+                <span class="stat-label">{{ item.species }}</span>
+                <span class="stat-value">S/ {{ item.total | number: '1.2-2' }}</span>
+              </div>
+              <div *ngIf="speciesStats.length === 0" class="text-muted text-center py-3">
+                No hay datos disponibles
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Por vehículo -->
+    <div class="detail-card">
+      <div class="detail-header">
+        <h4><i class="bi bi-truck me-2"></i>Movimientos por Tipo de Vehículo</h4>
+      </div>
+      <div class="detail-body">
+        <div class="stats-list">
+          <div *ngFor="let item of vehicleStats" class="stat-item">
+            <span class="stat-label">{{ item.vehicle_type || 'Sin tipo' }}</span>
+            <span class="stat-value">{{ item.count }} movimientos</span>
+          </div>
+          <div *ngIf="vehicleStats.length === 0" class="text-muted text-center py-3">
+            No hay datos disponibles
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
