@@ -1,2 +1,0 @@
-# Pecuaria-Iscoconga
-
