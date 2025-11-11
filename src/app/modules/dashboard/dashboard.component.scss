@@ -1,0 +1,564 @@
+/* 🌐 Animación general de entrada */
+.dashboard-container {
+  animation: fadeIn 0.8s ease-out;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #eef2f6 50%, #f8f9fa 100%);
+  padding-bottom: 4rem;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Efecto de partículas sutiles en el fondo */
+.dashboard-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 123, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(40, 167, 69, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(253, 126, 20, 0.02) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* 🎨 Título con gradiente elegante mejorado */
+.text-gradient {
+  background: linear-gradient(135deg, #007bff 0%, #6610f2 50%, #007bff 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.8px;
+  animation: gradientShift 3s ease-in-out infinite;
+  position: relative;
+  display: inline-block;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(90deg, #007bff, #6610f2);
+    border-radius: 2px;
+    opacity: 0.8;
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* 📊 TARJETAS DE ESTADÍSTICAS MEJORADAS */
+.stat-card {
+  border-radius: 1.5rem;
+  color: #fff;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+  position: relative;
+  padding: 2rem 1.5rem;
+  box-shadow: 
+    0 12px 35px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  /* Efecto de brillo mejorado */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.15), transparent 70%);
+    transform: rotate(25deg);
+    transition: opacity 0.6s ease;
+    opacity: 0;
+  }
+}
+
+/* Colores específicos para cada tarjeta de estadísticas con mejor contraste */
+.stat-card-1 {
+  background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+  box-shadow: 0 12px 35px rgba(0, 123, 255, 0.25);
+}
+
+.stat-card-2 {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  box-shadow: 0 12px 35px rgba(40, 167, 69, 0.25);
+}
+
+.stat-card-3 {
+  background: linear-gradient(135deg, #fd7e14 0%, #dc3545 100%);
+  box-shadow: 0 12px 35px rgba(253, 126, 20, 0.25);
+}
+
+.stat-card-4 {
+  background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
+  box-shadow: 0 12px 35px rgba(111, 66, 193, 0.25);
+}
+
+.stat-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  
+  &::before {
+    left: 100%;
+  }
+  
+  &::after {
+    opacity: 1;
+  }
+  
+  .icon-circle {
+    transform: rotate(15deg) scale(1.15);
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 
+      0 8px 25px rgba(255, 255, 255, 0.3),
+      inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* 💫 Círculo de ícono mejorado */
+.icon-circle {
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    inset 0 4px 12px rgba(255, 255, 255, 0.2),
+    0 4px 15px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  
+  i {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  }
+}
+
+/* =======================
+   ACCIONES RÁPIDAS CENTRADAS MEJORADAS
+======================= */
+
+/* Contenedor principal centrado mejorado */
+.row.mt-5.g-4 {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 2.5rem !important;
+  
+  .col-md-4.col-sm-6 {
+    display: flex;
+    justify-content: center;
+    flex: 0 0 auto;
+    
+    &:nth-child(1):nth-last-child(2),
+    &:nth-child(2):nth-last-child(1) {
+      max-width: 420px;
+      width: 100%;
+      
+      @media (max-width: 768px) {
+        max-width: 100%;
+        flex: 0 0 100%;
+      }
+    }
+  }
+}
+
+/* ⚡ Tarjetas de acción premium mejoradas */
+.action-card {
+  border-radius: 1.8rem;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  height: 100%;
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  
+  /* Efecto de brillo base */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.6),
+      transparent
+    );
+    transition: left 0.8s ease;
+  }
+}
+
+.action-card .card-body {
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  z-index: 2;
+  position: relative;
+  height: 100%;
+  background: inherit;
+}
+
+/* 🟢 Íconos circulares premium */
+.action-card .icon-wrapper {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.15),
+    inset 0 4px 12px rgba(255, 255, 255, 0.3);
+  
+  /* Gradientes mejorados */
+  &.bg-primary {
+    background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+    box-shadow: 0 15px 35px rgba(0, 123, 255, 0.4);
+  }
+  
+  &.bg-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    box-shadow: 0 15px 35px rgba(40, 167, 69, 0.4);
+  }
+  
+  i {
+    font-size: 2.8rem;
+    color: white;
+    transition: all 0.4s ease;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+  }
+}
+
+/* 💎 Efecto de brillo dinámico mejorado */
+.action-card .icon-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: all 0.8s ease;
+  opacity: 0;
+}
+
+.action-card:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  
+  &::before {
+    left: 100%;
+  }
+  
+  .icon-wrapper {
+    transform: scale(1.2) rotate(8deg);
+    
+    i {
+      transform: scale(1.15);
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+    }
+    
+    &::before {
+      opacity: 1;
+      animation: shine 2s ease-in-out;
+    }
+  }
+  
+  .btn {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+  
+  &::after {
+    opacity: 1;
+  }
+}
+
+/* 🌈 Borde animado mejorado */
+.action-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1.8rem;
+  padding: 3px;
+  background: linear-gradient(135deg, #007bff, #28a745, #6610f2, #20c997);
+  background-size: 300% 300%;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: all 0.5s ease;
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.action-card:hover::after {
+  opacity: 1;
+  animation-duration: 1.5s;
+}
+
+/* 🧭 Tipografía mejorada */
+.action-card h5 {
+  color: #1a1a1a;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  background: linear-gradient(135deg, #2d3748, #4a5568);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.5px;
+}
+
+.action-card p {
+  color: #718096;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  flex-grow: 1;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.action-card .btn {
+  border-radius: 50px;
+  padding: 0.75rem 2rem;
+  font-weight: 700;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-width: 2px;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s;
+  }
+  
+  &:hover::before {
+    left: 100%;
+  }
+}
+
+.action-card .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* ✨ Animaciones globales mejoradas */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+/* =======================
+   RESPONSIVIDAD MEJORADA
+======================= */
+
+@media (max-width: 1200px) {
+  .row.mt-5.g-4 {
+    gap: 2rem !important;
+  }
+  
+  .action-card {
+    max-width: 380px;
+  }
+}
+
+@media (max-width: 992px) {
+  .dashboard-container {
+    padding-bottom: 3rem;
+  }
+  
+  .row.mt-5.g-4 .col-md-4.col-sm-6 {
+    max-width: 380px;
+    
+    &:nth-child(1):nth-last-child(2),
+    &:nth-child(2):nth-last-child(1) {
+      max-width: 380px;
+    }
+  }
+  
+  .action-card {
+    max-width: 380px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stat-card,
+  .action-card {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .stat-card h2 {
+    font-size: 1.8rem;
+  }
+
+  .action-card .card-body {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .action-card .icon-wrapper {
+    width: 100px;
+    height: 100px;
+  }
+
+  .action-card .icon-wrapper i {
+    font-size: 2.4rem;
+  }
+  
+  .row.mt-5.g-4 {
+    .col-md-4.col-sm-6 {
+      flex: 0 0 100%;
+      max-width: 100%;
+      
+      &:nth-child(1):nth-last-child(2),
+      &:nth-child(2):nth-last-child(1) {
+        max-width: 100%;
+      }
+    }
+  }
+  
+  .action-card {
+    max-width: 100%;
+    margin: 0 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-container {
+    padding: 2rem 0 3rem 0;
+  }
+  
+  .row.mt-5.g-4 {
+    gap: 1.5rem !important;
+  }
+  
+  .action-card {
+    margin: 0 1rem;
+    border-radius: 1.5rem;
+  }
+  
+  .action-card .card-body {
+    padding: 2rem 1.25rem;
+  }
+  
+  .action-card .icon-wrapper {
+    width: 90px;
+    height: 90px;
+    
+    i {
+      font-size: 2.2rem;
+    }
+  }
+}
+
+/* =======================
+   EFECTOS ESPECIALES MEJORADOS
+======================= */
+
+@media (min-width: 769px) {
+  .row.mt-5.g-4 .col-md-4.col-sm-6 {
+    &:nth-child(1) {
+      animation: fadeIn 0.8s ease-out 0.1s both;
+    }
+    &:nth-child(2) {
+      animation: fadeIn 0.8s ease-out 0.2s both;
+    }
+  }
+  
+  .action-card:hover ~ .action-card {
+    opacity: 0.7;
+    transform: translateY(-6px) scale(0.98);
+  }
+}
+
+/* Loader mejorado */
+.text-center .spinner-border {
+  border-width: 4px;
+  animation: pulse 2s infinite, spin 1s linear infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4);
+  }
+  70% { 
+    box-shadow: 0 0 0 15px rgba(0, 123, 255, 0);
+  }
+}

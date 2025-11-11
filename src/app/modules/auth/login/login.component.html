@@ -1,0 +1,72 @@
+<div class="login-container">
+  <div class="login-card card">
+    <div class="card-body p-5">
+      <div class="text-center mb-4">
+        <h2 class="card-title text-primary">
+          <i class="bi bi-building me-2"></i>
+          {{ appName }}
+        </h2>
+        <p class="text-muted">Sistema de Gestión</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            formControlName="email"
+            placeholder="usuario@ejemplo.com"
+            [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          >
+          <div class="invalid-feedback" *ngIf="loginForm.get('email')?.errors?.['required']">
+            El email es requerido
+          </div>
+          <div class="invalid-feedback" *ngIf="loginForm.get('email')?.errors?.['email']">
+            Ingresa un email válido
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-4">
+          <label for="password" class="form-label">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            formControlName="password"
+            placeholder="Ingresa tu contraseña"
+            [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          >
+          <div class="invalid-feedback" *ngIf="loginForm.get('password')?.errors?.['required']">
+            La contraseña es requerida
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="alert alert-danger" *ngIf="errorMessage">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          {{ errorMessage }}
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="btn btn-primary w-100 py-2"
+          [disabled]="loginForm.invalid || loading"
+        >
+          <span *ngIf="!loading">
+            <i class="bi bi-box-arrow-in-right me-2"></i>
+            Iniciar Sesión
+          </span>
+          <span *ngIf="loading">
+            <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+            Iniciando sesión...
+          </span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
