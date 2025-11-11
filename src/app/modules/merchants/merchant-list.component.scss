@@ -1,0 +1,449 @@
+@use "sass:color";
+
+/* ================================
+   🌿 VARIABLES DE ESTILO
+================================ */
+$primary-color: #27ae60;
+$primary-dark: #219150;
+$primary-light: #eafaf1;
+$text-dark: #2c3e50;
+$text-light: #7f8c8d;
+$text-muted: #95a5a6;
+$border-radius: 20px;
+$transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$shadow-light: 0 5px 20px rgba(0, 0, 0, 0.05);
+$shadow-strong: 0 15px 35px rgba(0, 0, 0, 0.15);
+
+/* ================================
+   🧭 CONTENEDOR PRINCIPAL
+================================ */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 20px;
+  animation: fadeInUp 0.8s ease-out;
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ================================
+   🪄 CARD PRINCIPAL
+================================ */
+.card {
+  border-radius: $border-radius;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  box-shadow: $shadow-light;
+  padding: 3rem;
+  transition: $transition;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(
+      90deg,
+      $primary-color,
+      color.adjust($primary-color, $lightness: 15%)
+    );
+    border-radius: $border-radius $border-radius 0 0;
+  }
+
+  &:hover {
+    box-shadow: $shadow-strong;
+    transform: translateY(-6px);
+  }
+
+  h2 {
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    font-size: 2.4rem;
+    background: linear-gradient(
+      135deg,
+      $text-dark,
+      color.adjust($text-dark, $lightness: 10%)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(
+        90deg,
+        $primary-color,
+        color.adjust($primary-color, $lightness: 25%)
+      );
+      border-radius: 2px;
+    }
+  }
+
+  p {
+    color: $text-light;
+    font-size: 1.05rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .alert {
+    border-radius: 15px;
+    font-weight: 600;
+    background: linear-gradient(
+      135deg,
+      $primary-light,
+      color.adjust($primary-light, $lightness: 5%)
+    );
+    color: $primary-dark;
+    text-align: center;
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.15);
+    border: 2px solid rgba(39, 174, 96, 0.1);
+    position: relative;
+
+    &::before {
+      content: '💡';
+      position: absolute;
+      left: 1.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+    }
+  }
+
+  .btn-success {
+    background: linear-gradient(
+      135deg,
+      $primary-color,
+      color.adjust($primary-color, $lightness: -10%)
+    );
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 0.875rem 2rem;
+    font-size: 1.05rem;
+    transition: $transition;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
+      transition: left 0.6s;
+    }
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(39, 174, 96, 0.4);
+      &::before {
+        left: 100%;
+      }
+    }
+
+    &:active {
+      transform: translateY(-1px);
+    }
+  }
+
+  .form-add-merchant {
+    background: linear-gradient(145deg, #f9fdfb, #ffffff);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: $shadow-light;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    .form-group {
+      margin-bottom: 1.2rem;
+
+      .form-control {
+        border-radius: 12px;
+        border: 2px solid #e9ecef;
+        padding: 0.875rem 1.2rem;
+        font-size: 1rem;
+        transition: $transition;
+        background: #fff;
+
+        &:focus {
+          border-color: $primary-color;
+          box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+          transform: translateY(-2px);
+        }
+
+        &::placeholder {
+          color: #adb5bd;
+        }
+      }
+    }
+
+    .btn-primary {
+      background: linear-gradient(
+        135deg,
+        $primary-color,
+        color.adjust($primary-color, $lightness: -10%)
+      );
+      border: none;
+      border-radius: 12px;
+      padding: 1rem 2rem;
+      font-weight: 600;
+      font-size: 1.05rem;
+      transition: $transition;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .merchant-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.8rem;
+    margin-top: 2rem;
+
+    .merchant-card {
+      background: linear-gradient(145deg, #ffffff, #fafafa);
+      border-radius: 18px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: $transition;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: $shadow-light;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: cardEntrance 0.6s ease-out forwards;
+
+      @for $i from 1 through 10 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{$i * 0.1}s;
+        }
+      }
+
+      &:hover {
+        background: linear-gradient(
+          135deg,
+          color.adjust($primary-light, $lightness: 15%),
+          color.adjust($primary-light, $lightness: 5%)
+        );
+        box-shadow: $shadow-strong;
+        transform: translateY(-8px) scale(1.02);
+
+        .user-icon {
+          transform: scale(1.1) rotate(5deg);
+          background: linear-gradient(
+            135deg,
+            $primary-color,
+            color.adjust($primary-color, $lightness: -10%)
+          );
+          color: white;
+        }
+      }
+
+      .merchant-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.2rem;
+        margin-bottom: 1.5rem;
+
+        .user-icon {
+          font-size: 2.3rem;
+          color: $primary-color;
+          background: linear-gradient(
+            135deg,
+            $primary-light,
+            color.adjust($primary-light, $lightness: 5%)
+          );
+          border-radius: 50%;
+          padding: 0.8rem;
+          box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
+          width: 70px;
+          height: 70px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: $transition;
+        }
+
+        .text-info {
+          flex: 1;
+
+          strong {
+            font-size: 1.25rem;
+            color: $text-dark;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+          }
+
+          p {
+            font-size: 0.95rem;
+            color: $text-light;
+            margin: 0.2rem 0;
+          }
+
+          .phone-active {
+            color: $primary-color;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+          }
+
+          .phone-inactive {
+            color: $text-muted;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+          }
+        }
+      }
+
+      .merchant-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.8rem;
+        margin-top: auto;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+        button {
+          font-size: 0.9rem;
+          padding: 0.6rem 1.2rem;
+          border-radius: 10px;
+          font-weight: 600;
+          border: none;
+          transition: $transition;
+
+          &.btn-warning {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+            color: #000;
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 6px 15px rgba(255, 193, 7, 0.3);
+            }
+          }
+
+          &.btn-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: #fff;
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 6px 15px rgba(220, 53, 69, 0.3);
+            }
+          }
+        }
+      }
+    }
+
+    @keyframes cardEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(25px) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  }
+
+  .text-center.text-muted {
+    padding: 3rem 1rem;
+    font-size: 1.1rem;
+    color: $text-muted;
+
+    &::before {
+      content: '👥';
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 2.5rem 2rem;
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    .merchant-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .merchant-card {
+      padding: 1.8rem;
+
+      .merchant-info {
+        flex-direction: column;
+        text-align: center;
+
+        .user-icon {
+          align-self: center;
+        }
+      }
+
+      .merchant-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+
+    .form-add-merchant {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 2rem 1.2rem;
+
+    h2 {
+      font-size: 1.8rem;
+    }
+
+    .btn-success,
+    .form-add-merchant .btn-primary {
+      width: 100%;
+    }
+  }
+}
