@@ -1,0 +1,385 @@
+.login-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1b3eda 0%, #441375 100%);
+  background-attachment: fixed;
+  padding: 2rem;
+  animation: gradientShift 8s ease-in-out infinite, fadeIn 1.5s ease-out;
+  z-index: 9999;
+  overflow: auto;
+  
+  /* Efecto de partículas animadas */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.4) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+    animation: floatParticles 12s ease-in-out infinite;
+    pointer-events: none;
+  }
+  
+  /* Para navegadores móviles */
+  @supports (height: 100dvh) {
+    height: 100dvh;
+  }
+}
+
+/* Asegurar que el body no tenga márgenes */
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* ==========================
+   ANIMACIONES PRINCIPALES
+========================== */
+
+/* Animación de cambio de gradiente */
+@keyframes gradientShift {
+  0%, 100% {
+    background: linear-gradient(135deg, #1b3eda 0%, #441375 100%);
+  }
+  25% {
+    background: linear-gradient(135deg, #441375 0%, #1b3eda 100%);
+  }
+  50% {
+    background: linear-gradient(135deg, #1b3eda 0%, #d43f8d 100%);
+  }
+  75% {
+    background: linear-gradient(135deg, #d43f8d 0%, #441375 100%);
+  }
+}
+
+/* Animación de partículas flotantes */
+@keyframes floatParticles {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.7;
+  }
+  33% {
+    transform: translateY(-20px) rotate(120deg);
+    opacity: 0.9;
+  }
+  66% {
+    transform: translateY(10px) rotate(240deg);
+    opacity: 0.5;
+  }
+}
+
+/* Animación de entrada principal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(1.1) rotate(-2deg);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    filter: blur(0);
+  }
+}
+
+/* ==========================
+   ANIMACIONES PARA LA CARD DE LOGIN
+========================== */
+
+.login-card {
+  animation: cardEntrance 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both,
+             cardGlow 4s ease-in-out infinite 2s;
+  
+  /* Efecto de brillo sutil */
+  &::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #ff6b6b);
+    background-size: 400%;
+    border-radius: inherit;
+    z-index: -1;
+    animation: borderGlow 6s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+/* Animación de entrada de la card */
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(100px) scale(0.8) rotateX(45deg);
+    filter: blur(20px);
+  }
+  50% {
+    opacity: 0.7;
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0);
+    filter: blur(0);
+  }
+}
+
+/* Animación de brillo sutil para la card */
+@keyframes cardGlow {
+  0%, 100% {
+    box-shadow: 
+      0 10px 40px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 15px 50px rgba(255, 255, 255, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.2),
+      0 0 30px rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Animación del borde de colores */
+@keyframes borderGlow {
+  0% {
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+    filter: hue-rotate(360deg);
+  }
+}
+
+/* ==========================
+   ANIMACIONES PARA LOS ELEMENTOS DEL FORMULARIO
+========================== */
+
+/* Animación escalonada para los elementos del formulario */
+.form-label {
+  animation: slideInLeft 0.8s ease-out 0.8s both;
+}
+
+.form-control {
+  animation: inputPop 0.6s ease-out 1s both;
+  
+  &:focus {
+    animation: inputFocus 0.3s ease-out;
+  }
+}
+
+.alert {
+  animation: shake 0.5s ease-in-out 1.2s both;
+}
+
+.btn-primary {
+  animation: buttonBounce 0.8s ease-out 1.4s both;
+  
+  &:hover {
+    animation: buttonPulse 0.6s ease-in-out;
+  }
+}
+
+.bg-light.rounded {
+  animation: fadeInUp 0.8s ease-out 1.6s both;
+}
+
+/* ==========================
+   ANIMACIONES ESPECÍFICAS
+========================== */
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes inputPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  70% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes inputFocus {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes buttonBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-180deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  70% {
+    transform: scale(0.9) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes buttonPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================
+   EFECTOS ESPECIALES ADICIONALES
+========================== */
+
+/* Efecto de brillo en los inputs al focus */
+.form-control:focus {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+    border-radius: inherit;
+    z-index: -1;
+    animation: inputGlow 2s linear infinite;
+  }
+}
+
+@keyframes inputGlow {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Efecto de partículas que caen */
+.login-container::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 2%),
+    radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 2%),
+    radial-gradient(circle at 50% 60%, rgba(255, 255, 255, 0.1) 0%, transparent 2%),
+    radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 2%),
+    radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.1) 0%, transparent 2%);
+  animation: fallingParticles 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes fallingParticles {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* ==========================
+   RESPONSIVE Y ACCESIBILIDAD
+========================== */
+
+/* Reducir animaciones si el usuario prefiere */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Ajustes para móviles */
+@media (max-width: 768px) {
+  .login-container {
+    animation: gradientShift 12s ease-in-out infinite, fadeIn 1.5s ease-out;
+    
+    &::before,
+    &::after {
+      animation-duration: 20s;
+    }
+  }
+  
+  .login-card {
+    animation: cardEntrance 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
+  }
+}
