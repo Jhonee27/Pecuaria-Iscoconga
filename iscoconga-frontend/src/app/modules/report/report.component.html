@@ -1,0 +1,246 @@
+<div class="statistics-container">
+  <!-- Header Mejorado -->
+  <div class="header">
+    <div class="header-content">
+      <div class="title-section">
+        <div class="icon-wrapper">
+          <i class="bi bi-graph-up-arrow"></i>
+        </div>
+        <div>
+          <h1 class="title">Dashboard de Estadísticas</h1>
+          <p class="subtitle">Resumen general de ingresos y movimientos del sistema</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="header-badge" *ngIf="lastUpdate">
+          <i class="bi bi-clock"></i>
+          Actualizado: {{ getLastUpdateFormatted() }}
+        </div>
+        <button class="btn-refresh" (click)="reloadAll()" [disabled]="isLoading">
+          <i class="bi bi-arrow-clockwise" [class.spin]="isLoading"></i>
+          Actualizar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loader Mejorado -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loader-wrapper">
+      <div class="pulse-loader"></div>
+      <h3>Analizando datos...</h3>
+      <p>Estamos preparando tu dashboard</p>
+    </div>
+  </div>
+
+  <!-- Error Message Mejorado -->
+  <div *ngIf="hasError && !isLoading" class="error-container">
+    <div class="error-icon">
+      <i class="bi bi-emoji-frown"></i>
+    </div>
+    <h3>¡Ups! Algo salió mal</h3>
+    <p>No pudimos cargar las estadísticas en este momento</p>
+    <button class="btn-retry" (click)="reloadAll()">
+      <i class="bi bi-arrow-clockwise"></i>
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Filtros Mejorados -->
+  <div *ngIf="!isLoading && !hasError" class="filters-section">
+    <div class="filters-card">
+      <div class="filter-header">
+        <div class="filter-title">
+          <i class="bi bi-sliders2"></i>
+          <h3>Filtros Avanzados</h3>
+          <span class="filter-indicator" *ngIf="dateRange.desde || dateRange.hasta">
+            <i class="bi bi-funnel-fill"></i>
+            Filtros activos
+          </span>
+        </div>
+        <div class="filter-actions">
+          <button class="btn btn-outline" (click)="clearFilters()" [disabled]="!dateRange.desde && !dateRange.hasta">
+            <i class="bi bi-arrow-counterclockwise"></i>
+            Reiniciar
+          </button>
+          <button class="btn btn-primary" (click)="applyFilters()">
+            <i class="bi bi-check-lg"></i>
+            Aplicar Filtros
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-content">
+        <div class="date-filters">
+          <div class="date-input-group">
+            <label class="input-label">
+              <i class="bi bi-calendar3"></i>
+              Fecha Inicio
+            </label>
+            <input type="date" class="modern-input" [(ngModel)]="dateRange.desde" [max]="dateRange.hasta">
+          </div>
+          <div class="date-input-group">
+            <label class="input-label">
+              <i class="bi bi-calendar3"></i>
+              Fecha Fin
+            </label>
+            <input type="date" class="modern-input" [(ngModel)]="dateRange.hasta" [min]="dateRange.desde">
+          </div>
+          <div class="quick-filters">
+            <button class="quick-filter-btn" (click)="setQuickFilter('today')">Hoy</button>
+            <button class="quick-filter-btn" (click)="setQuickFilter('week')">Esta Semana</button>
+            <button class="quick-filter-btn" (click)="setQuickFilter('month')">Este Mes</button>
+          </div>
+        </div>
+
+        <div class="export-actions">
+          <button class="btn-export excel" (click)="generateExcelReport()" [disabled]="isGeneratingReport">
+            <i class="bi bi-file-earmark-excel"></i>
+            <span *ngIf="isGeneratingReport; else excelText">
+              <span class="spinner"></span>
+              Generando...
+            </span>
+            <ng-template #excelText>Exportar Excel</ng-template>
+          </button>
+
+          <button class="btn-export csv" (click)="generateCSVReport()" [disabled]="isGeneratingReport">
+            <i class="bi bi-file-earmark-text"></i>
+            Exportar CSV
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Cards Mejoradas -->
+  <div *ngIf="!isLoading && !hasError" class="kpi-section">
+    <div class="section-header">
+      <h2>Métricas Principales</h2>
+      <div class="kpi-period">
+        <i class="bi bi-calendar-week"></i>
+        Período actual
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <!-- Ingresos Hoy -->
+      <div class="kpi-card income">
+        <div class="kpi-header">
+          <div class="kpi-icon">
+            <i class="bi bi-cash-coin"></i>
+          </div>
+          <div class="kpi-trend positive">
+            <i class="bi bi-arrow-up-right"></i>
+            <span>12%</span>
+          </div>
+        </div>
+        <div class="kpi-content">
+          <h3 class="kpi-value">S/ {{ (stats.todayIncome || 0) | number:'1.2-2' }}</h3>
+          <p class="kpi-title">Ingresos Hoy</p>
+          <div class="kpi-comparison">
+            <span class="comparison-text">vs ayer: +S/ 1,250.00</span>
+          </div>
+        </div>
+        <div class="kpi-footer">
+          <i class="bi bi-info-circle"></i>
+          <span>Actualizado hace 5 min</span>
+        </div>
+      </div>
+
+      <!-- Ingresos Mensuales -->
+      <div class="kpi-card monthly">
+        <div class="kpi-header">
+          <div class="kpi-icon">
+            <i class="bi bi-graph-up"></i>
+          </div>
+          <div class="kpi-trend positive">
+            <i class="bi bi-arrow-up-right"></i>
+            <span>8%</span>
+          </div>
+        </div>
+        <div class="kpi-content">
+          <h3 class="kpi-value">S/ {{ (stats.monthlyIncome || 0) | number:'1.2-2' }}</h3>
+          <p class="kpi-title">Ingresos Mensuales</p>
+          <div class="kpi-comparison">
+            <span class="comparison-text">vs mes anterior</span>
+          </div>
+        </div>
+        <div class="kpi-footer">
+          <i class="bi bi-calendar-month"></i>
+          <span>Mes en curso</span>
+        </div>
+      </div>
+
+      <!-- Comerciantes -->
+      <div class="kpi-card merchants">
+        <div class="kpi-header">
+          <div class="kpi-icon">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div class="kpi-trend neutral">
+            <i class="bi bi-dash"></i>
+            <span>0%</span>
+          </div>
+        </div>
+        <div class="kpi-content">
+          <h3 class="kpi-value">{{ stats.totalMerchants || 0 }}</h3>
+          <p class="kpi-title">Comerciantes</p>
+          <div class="kpi-comparison">
+            <span class="comparison-text">activos en sistema</span>
+          </div>
+        </div>
+        <div class="kpi-footer">
+          <i class="bi bi-person-check"></i>
+          <span>Total registrados</span>
+        </div>
+      </div>
+
+      <!-- Movimientos -->
+      <div class="kpi-card movements">
+        <div class="kpi-header">
+          <div class="kpi-icon">
+            <i class="bi bi-arrow-left-right"></i>
+          </div>
+          <div class="kpi-trend positive">
+            <i class="bi bi-arrow-up-right"></i>
+            <span>15%</span>
+          </div>
+        </div>
+        <div class="kpi-content">
+          <h3 class="kpi-value">{{ stats.totalMovements || 0 }}</h3>
+          <p class="kpi-title">Movimientos</p>
+          <div class="kpi-comparison">
+            <span class="comparison-text">registrados hoy</span>
+          </div>
+        </div>
+        <div class="kpi-footer">
+          <i class="bi bi-clock-history"></i>
+          <span>Actualizado en tiempo real</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráficos Mejorados -->
+  <div *ngIf="!isLoading && !hasError" class="charts-section">
+    <div class="section-header">
+      <h2>Análisis Visual</h2>
+      <div class="chart-controls">
+        <button class="control-btn" [class.active]="chartPeriod === 'day'" (click)="setChartPeriod('day')">
+          Día
+        </button>
+        <button class="control-btn" [class.active]="chartPeriod === 'week'" (click)="setChartPeriod('week')">
+          Semana
+        </button>
+        <i class="bi bi-lightbulb"></i>
+        <span>Los datos se actualizan automáticamente cada 5 minutos</span>
+      </div>
+      <div class="footer-actions">
+        <button class="footer-btn" (click)="quickDownload('excel')">
+          <i class="bi bi-download"></i>
+          Descarga Rápida
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

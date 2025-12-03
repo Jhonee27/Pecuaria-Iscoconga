@@ -1,0 +1,376 @@
+// Variables gubernamentales
+$primary-blue: #1e40af;
+$secondary-blue: #3b82f6;
+$dark-blue: #1e3a8a;
+$light-blue: #dbeafe;
+$gray-900: #111827;
+$gray-700: #374151;
+$gray-500: #6b7280;
+$gray-200: #e5e7eb;
+$gray-100: #f3f4f6;
+$success: #059669;
+$error: #dc2626;
+$white: #ffffff;
+
+// Login wrapper
+.login-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, $gray-100 0%, $light-blue 100%);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  @media (max-width: 968px) {
+    flex-direction: column;
+  }
+}
+
+// =========================================
+// BRAND PANEL (Izquierda)
+// =========================================
+.brand-panel {
+  flex: 0 0 45%;
+  background: linear-gradient(135deg, $dark-blue 0%, $primary-blue 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  overflow: hidden;
+
+  // Efecto decorativo sutil
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+    animation: subtleFloat 20s ease-in-out infinite;
+  }
+
+  .brand-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: $white;
+
+    .gov-emblem {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+
+      i {
+        font-size: 3rem;
+        color: $white;
+      }
+    }
+
+    .system-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    .system-subtitle {
+      font-size: 1.125rem;
+      opacity: 0.9;
+      margin-bottom: 3rem;
+      font-weight: 400;
+    }
+
+    .info-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 3rem;
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 1rem;
+        opacity: 0.9;
+
+        i {
+          font-size: 1.5rem;
+          background: rgba(255, 255, 255, 0.1);
+          padding: 0.5rem;
+          border-radius: 8px;
+        }
+      }
+    }
+  }
+
+  .decorative-element {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.1) 100%);
+  }
+
+  @media (max-width: 968px) {
+    flex: none;
+    min-height: 40vh;
+    padding: 2rem;
+
+    .brand-content {
+      .system-title {
+        font-size: 2rem;
+      }
+
+      .info-section {
+        display: none;
+      }
+    }
+  }
+}
+
+// =========================================
+// FORM PANEL (Derecha)
+// =========================================
+.form-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: $white;
+
+  .form-container {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .login-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+
+    h2 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: $gray-900;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    p {
+      color: $gray-500;
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 968px) {
+    padding: 1.5rem;
+  }
+}
+
+// =========================================
+// FORMULARIO
+// =========================================
+.form-group {
+  margin-bottom: 1.5rem;
+
+  .form-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: $gray-700;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    i {
+      font-size: 1rem;
+      color: $primary-blue;
+    }
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid $gray-200;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    background: $white;
+    color: $gray-900;
+
+    &::placeholder {
+      color: $gray-500;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $primary-blue;
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+    }
+
+    &.invalid {
+      border-color: $error;
+
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+      }
+    }
+  }
+
+  .error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: $error;
+
+    i {
+      font-size: 1rem;
+    }
+  }
+}
+
+// =========================================
+// ALERT ERROR
+// =========================================
+.alert-error {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(220, 38, 38, 0.05);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-left: 4px solid $error;
+  border-radius: 8px;
+  color: $error;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+
+  i {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+}
+
+// =========================================
+// BOTÓN DE LOGIN
+// =========================================
+.btn-login {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, $primary-blue 0%, $secondary-blue 100%);
+  color: $white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+
+  i {
+    font-size: 1.125rem;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.loading {
+    position: relative;
+  }
+
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: $white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+// =========================================
+// FOOTER INFO
+// =========================================
+.footer-info {
+  margin-top: 2rem;
+  text-align: center;
+
+  .security-notice {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: $gray-100;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: $gray-700;
+    border: 1px solid $gray-200;
+
+    i {
+      color: $primary-blue;
+      font-size: 1rem;
+    }
+  }
+}
+
+// =========================================
+// ANIMACIONES
+// =========================================
+@keyframes subtleFloat {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(10px, 10px) scale(1.05);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Reducir animaciones si el usuario lo prefiere
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

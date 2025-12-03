@@ -1,0 +1,172 @@
+<div class="container mt-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+    <div>
+      <h1 class="h3 mb-1">
+        <i class="bi bi-people-fill me-2 text-primary"></i>
+        Gestión de Usuarios
+      </h1>
+      <p class="text-muted mb-0">Administra los usuarios del sistema</p>
+    </div>
+    <a routerLink="/dashboard" class="btn btn-outline-primary mt-2 mt-sm-0">
+      <i class="bi bi-arrow-left me-1"></i> Volver al Dashboard
+    </a>
+  </div>
+
+  <!-- Acceso Restringido -->
+  <div *ngIf="!isAdmin()" class="alert alert-warning">
+    <div class="d-flex align-items-center">
+      <i class="bi bi-exclamation-triangle me-3 fs-4"></i>
+      <div>
+        <h5 class="alert-heading mb-1">Acceso Restringido</h5>
+        <p class="mb-0">Solo los administradores pueden gestionar usuarios.</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isAdmin()">
+
+    <!-- Formulario Crear/Editar Usuario -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-header" [class]="isEditing ? 'bg-warning text-dark' : 'bg-success text-white'">
+        <div class="d-flex align-items-center">
+          <i class="bi me-2 fs-5" [class]="isEditing ? 'bi-pencil-square' : 'bi-person-plus'"></i>
+          <h5 class="card-title mb-0">{{ isEditing ? 'Editar Usuario' : 'Crear Nuevo Usuario' }}</h5>
+        </div>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+          <div class="row g-3 flex-wrap">
+
+            <!-- Email -->
+            <div class="col-md-4">
+              <label for="email" class="form-label fw-semibold">Email</label>
+              <input type="email" id="email" class="form-control form-control-lg"
+                     formControlName="email"
+                     placeholder="usuario@ejemplo.com"
+                     [class.is-invalid]="userForm.get('email')?.invalid && userForm.get('email')?.touched">
+              <div class="invalid-feedback" *ngIf="userForm.get('email')?.errors?.['required']">Email requerido</div>
+              <div class="invalid-feedback" *ngIf="userForm.get('email')?.errors?.['email']">Email inválido</div>
+            </div>
+
+            <!-- Password -->
+            <div class="col-md-4">
+              <label for="password" class="form-label fw-semibold">Contraseña</label>
+              <input type="password" id="password" class="form-control form-control-lg"
+                     formControlName="password"
+                     [placeholder]="isEditing ? 'Dejar vacío para no cambiar' : 'Mínimo 6 caracteres'"
+                     [class.is-invalid]="userForm.get('password')?.invalid && userForm.get('password')?.touched">
+              <div class="invalid-feedback" *ngIf="userForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres</div>
+              <small class="text-muted" *ngIf="isEditing">
+                <i class="bi bi-info-circle me-1"></i>Dejar vacío si no quieres cambiar la contraseña
+              </small>
+            </div>
+
+            <!-- Rol -->
+            <div class="col-md-4">
+              <label for="role" class="form-label fw-semibold">Rol</label>
+              <select id="role" class="form-select form-select-lg"
+                      formControlName="role"
+                      [class.is-invalid]="userForm.get('role')?.invalid && userForm.get('role')?.touched">
+                <option value="">Seleccionar rol</option>
+                <option value="admin">Administrador</option>
+                <option value="personal">Personal</option>
+              </select>
+              <div class="invalid-feedback" *ngIf="userForm.get('role')?.errors?.['required']">Rol requerido</div>
+            </div>
+
+          </div>
+
+          <!-- Mensajes de estado -->
+          <div class="alert alert-success mt-3" *ngIf="successMessage">
+            <i class="bi bi-check-circle-fill me-2"></i>{{ successMessage }}
+          </div>
+          <div class="alert alert-danger mt-3" *ngIf="errorMessage">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMessage }}
+          </div>
+
+          <!-- Botones -->
+          <div class="d-flex flex-wrap gap-2 mt-4">
+            <button type="submit" class="btn btn-lg flex-grow-1"
+                    [class]="isEditing ? 'btn-warning' : 'btn-success'"
+                    [disabled]="userForm.invalid || loading">
+              <span *ngIf="!loading">
+                <i class="bi me-2" [class]="isEditing ? 'bi-check-lg' : 'bi-person-add'"></i>
+                {{ isEditing ? 'Actualizar Usuario' : 'Crear Usuario' }}
+              </span>
+              <span *ngIf="loading">
+                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                {{ isEditing ? 'Actualizando...' : 'Creando...' }}
+              </span>
+            </button>
+            <button type="button" class="btn btn-outline-secondary flex-grow-1"
+                    (click)="resetForm()" *ngIf="isEditing">
+              <i class="bi bi-x-circle me-2"></i> Cancelar
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- Lista de Usuarios -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center flex-wrap">
+        <h5 class="mb-0"><i class="bi bi-list-ul me-2 fs-5"></i>Lista de Usuarios</h5>
+        <span class="badge bg-light text-primary fs-6">{{ users.length }} usuarios</span>
+      </div>
+      <div class="card-body p-0 table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Fecha de Registro</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users">
+              <td>#{{ user.id }}</td>
+              <td>
+                {{ user.email }}
+                <span *ngIf="user.id===currentUser?.id" class="badge bg-info ms-2">Tú</span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="user.role==='admin' ? 'bg-danger' : 'bg-secondary'">
+                  {{ user.role==='admin' ? 'Administrador' : 'Personal' }}
+                </span>
+              </td>
+              <td>{{ user.created_at | formatDate }}</td>
+              <td class="text-center">
+                <button class="btn btn-outline-primary btn-sm me-1" (click)="onEditUser(user)" [disabled]="user.id===currentUser?.id">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-outline-danger btn-sm" (click)="onDeleteUser(user)" *ngIf="user.id!==currentUser?.id">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Sin usuarios -->
+            <tr *ngIf="users.length===0 && !loading">
+              <td colspan="5" class="text-center py-5 text-muted">
+                No hay usuarios registrados.
+              </td>
+            </tr>
+
+            <!-- Cargando -->
+            <tr *ngIf="loading">
+              <td colspan="5" class="text-center py-5 text-primary">
+                <div class="spinner-border me-2" role="status"></div>Cargando usuarios...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

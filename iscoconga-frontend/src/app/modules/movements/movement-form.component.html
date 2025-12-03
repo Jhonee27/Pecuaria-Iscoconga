@@ -1,0 +1,367 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-4 text-success fw-bold">Registro de Ingreso</h2>
+
+  <!-- Mensajes -->
+  <div *ngIf="successMessage" class="alert alert-success text-center shadow-sm">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger text-center shadow-sm">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Formulario principal -->
+  <form
+    [formGroup]="movementForm"
+    (ngSubmit)="submit()"
+    class="card p-4 shadow-lg border-0 rounded-4"
+  >
+    <div class="row mb-4">
+      <div class="col-md-8 mx-auto">
+        <label class="form-label fw-bold text-secondary">
+          Buscar Comerciante / Vendedor
+        </label>
+        
+        <!-- Buscador de comerciantes -->
+        <div class="position-relative">
+          <input
+            type="text"
+            class="form-control shadow-sm"
+            placeholder="Ingrese nombre o DNI del vendedor..."
+            [formControl]="merchantSearchControl"
+            (focus)="showMerchantDropdown = true"
+            (blur)="onMerchantBlur()"
+          >
+          
+          <!-- Dropdown de resultados -->
+          <div 
+            *ngIf="showMerchantDropdown && (filteredMerchants.length > 0 || merchantSearchControl.value)" 
+            class="position-absolute w-100 bg-white border rounded shadow-sm mt-1 z-3"
+            style="max-height: 250px; overflow-y: auto;"
+          >
+            <!-- Resultados de búsqueda -->
+            <div
+              *ngFor="let merchant of filteredMerchants"
+              class="p-2 border-bottom cursor-pointer hover-bg-light"
+              (mousedown)="selectMerchant(merchant)"
+            >
+              <div class="fw-bold">{{ merchant.name || (merchant.firstName + ' ' + merchant.lastName) }}</div>
+              <small class="text-muted">DNI: {{ merchant.dni || 'No disponible' }}</small>
+            </div>
+            
+            <!-- Opción para agregar nuevo comerciante -->
+            <div 
+              *ngIf="filteredMerchants.length === 0 && merchantSearchControl.value"
+              class="p-2 border-bottom cursor-pointer hover-bg-light text-primary"
+              (mousedown)="toggleForm()"
+            >
+              <div class="fw-bold">
+                <i class="bi bi-plus-circle me-2"></i>
+                Agregar nuevo comerciante: "{{ merchantSearchControl.value }}"
+              </div>
+              <small class="text-muted">Click para crear nuevo registro</small>
+            </div>
+            
+            <!-- Mensaje cuando no hay búsqueda -->
+            <div 
+              *ngIf="!merchantSearchControl.value" 
+              class="p-2 text-muted text-center"
+            >
+              Escribe para buscar comerciantes...
+            </div>
+          </div>
+        </div>
+        
+        <!-- Comerciante seleccionado -->
+        <div *ngIf="selectedMerchant" class="mt-2 p-2 bg-light rounded">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span class="fw-bold">Seleccionado:</span> 
+              {{ selectedMerchant.name || (selectedMerchant.firstName + ' ' + selectedMerchant.lastName) }}
+              <span class="text-muted ms-2">(DNI: {{ selectedMerchant.dni || 'No disponible' }})</span>
+            </div>
+            <button 
+              type="button" 
+              class="btn btn-sm btn-outline-danger"
+              (click)="clearMerchant()"
+            >
+              <i class="bi bi-x"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Formulario para agregar nuevo comerciante -->
+        <div *ngIf="showForm" class="mt-3 p-3 border rounded bg-light">
+          <h6 class="fw-bold text-primary mb-3">Agregar Nuevo Comerciante</h6>
+          
+          <!-- Mensaje de error del formulario -->
+          <div *ngIf="message" class="alert alert-warning mb-3">
+            {{ message }}
+          </div>
+          
+          <form (ngSubmit)="saveMerchant()">
+            <div class="row g-2">
+              <div class="col-md-6">
+                <input 
+                  type="text" 
+                  class="form-control form-control-sm" 
+                  placeholder="Nombre" 
+                  [(ngModel)]="newMerchant.firstName" 
+                  name="firstName" 
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <input 
+                  type="text" 
+                  class="form-control form-control-sm" 
+                  placeholder="Apellido" 
+                  [(ngModel)]="newMerchant.lastName" 
+                  name="lastName" 
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <input 
+                  type="text" 
+                  class="form-control form-control-sm" 
+                  placeholder="DNI" 
+                  [(ngModel)]="newMerchant.dni" 
+                  name="dni" 
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <input 
+                  type="text" 
+                  class="form-control form-control-sm" 
+                  placeholder="Teléfono" 
+                  [(ngModel)]="newMerchant.phone" 
+                  name="phone" 
+                />
+              </div>
+            </div>
+            
+            <div class="mt-2 d-flex gap-2">
+              <button 
+                type="submit" 
+                class="btn btn-success btn-sm"
+                [disabled]="!newMerchant.firstName || !newMerchant.lastName || !newMerchant.dni || savingMerchant"
+              >
+                <span *ngIf="savingMerchant" class="spinner-border spinner-border-sm me-1"></span>
+                {{ savingMerchant ? 'Guardando...' : 'Guardar Comerciante' }}
+              </button>
+              <button 
+                type="button" 
+                class="btn btn-outline-secondary btn-sm"
+                (click)="toggleForm()"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ítems -->
+    <div formArrayName="items" class="mt-4">
+      <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
+        Detalle del Ingreso
+      </h5>
+
+      <div
+        *ngFor="let item of items.controls; let i = index"
+        [formGroupName]="i"
+        class="card p-3 mb-3 border-0 shadow-sm bg-light rounded-3"
+      >
+        <div class="row g-3 align-items-center">
+          <div class="col-md-2">
+            <label class="form-label">Categoría</label>
+            <select class="form-select" formControlName="category">
+              <option value="ganado">Ganado</option>
+              <option value="cochera">Cochera</option>
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" formControlName="type">
+              <option
+                *ngFor="
+                  let t of item.get('category')?.value === 'ganado'
+                    ? ganadoTypes
+                    : vehicleTypes
+                "
+                [value]="t"
+              >
+                {{ t }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Raza / Nota</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="breed"
+              placeholder="Opcional"
+            />
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">Cant.</label>
+            <input
+              type="number"
+              min="1"
+              class="form-control text-center"
+              formControlName="qty_in"
+              (input)="updateSubtotal(i)"
+            />
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Precio Unit.</label>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              class="form-control text-end"
+              formControlName="unit_price"
+              (input)="updateSubtotal(i)"
+            />
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Subtotal</label>
+            <input
+              type="text"
+              class="form-control text-end bg-white"
+              formControlName="subtotal"
+              readonly
+            />
+          </div>
+
+          <div class="col-md-1 d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-outline-danger btn-sm mt-4 rounded-circle"
+              (click)="removeItem(i)"
+              title="Eliminar ítem"
+            >
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-end">
+        <button
+          type="button"
+          class="btn btn-outline-primary rounded-pill"
+          (click)="addItem()"
+        >
+          + Agregar Ítem
+        </button>
+      </div>
+    </div>
+
+    <!-- Total -->
+    <div class="mt-4 text-end border-top pt-3">
+      <h4 class="fw-bold text-success">
+        Total: S/ {{ total | number: '1.2-2' }}
+      </h4>
+    </div>
+
+    <!-- Botón de envío -->
+    <div class="mt-4 text-center">
+      <button
+        type="submit"
+        class="btn btn-success px-5 rounded-pill shadow-sm"
+        [disabled]="loading || !selectedMerchant"
+      >
+        {{ loading ? 'Guardando...' : 'Registrar Ingreso' }}
+      </button>
+    </div>
+  </form>
+
+  <!-- Listado de movimientos -->
+  <div class="mt-5">
+    <h4 class="mb-3 text-center text-primary fw-bold">Historial de Ingresos</h4>
+    <div class="table-responsive shadow-sm rounded-3">
+      <table class="table table-hover table-bordered align-middle mb-0">
+        <thead class="table-primary text-center">
+          <tr>
+            <th>ID</th>
+            <th>Vendedor</th>
+            <th>Total</th>
+            <th>Fecha</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let movement of movements">
+            <tr class="text-center">
+              <td>{{ movement.id }}</td>
+              <td>{{ getMerchantName(movement.merchant_id) }}</td>
+              <td>S/ {{ movement.total | number: '1.2-2' }}</td>
+              <td>{{ movement.date | date: 'dd/MM/yyyy' }}</td>
+              <td>
+                <button
+                  class="btn btn-sm btn-outline-primary rounded-circle"
+                  (click)="toggleExpanded(movement)"
+                  [title]="
+                    movement.expanded ? 'Ocultar detalle' : 'Ver detalle'
+                  "
+                >
+                  <i
+                    class="bi"
+                    [ngClass]="
+                      movement.expanded ? 'bi-chevron-up' : 'bi-chevron-down'
+                    "
+                  ></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="movement.expanded" class="bg-light">
+              <td colspan="5">
+                <table class="table table-sm mb-0 table-bordered rounded-3">
+                  <thead class="table-secondary text-center">
+                    <tr>
+                      <th>Categoría</th>
+                      <th>Tipo</th>
+                      <th>Raza / Nota</th>
+                      <th>Cantidad</th>
+                      <th>Precio Unitario</th>
+                      <th>Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let item of movement.items"
+                      class="text-center"
+                    >
+                      <td>{{ item.category }}</td>
+                      <td>{{ item.type }}</td>
+                      <td>{{ item.breed || item.note || '-' }}</td>
+                      <td>{{ item.qty_in }}</td>
+                      <td>S/ {{ item.unit_price | number: '1.2-2' }}</td>
+                      <td>S/ {{ item.subtotal | number: '1.2-2' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </ng-container>
+
+          <tr *ngIf="movements.length === 0">
+            <td colspan="5" class="text-center text-muted py-3">
+              No hay ingresos registrados aún.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

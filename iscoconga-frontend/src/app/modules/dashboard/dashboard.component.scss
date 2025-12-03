@@ -1,0 +1,208 @@
+/* Dashboard Gubernamental */
+.dashboard-container {
+  padding-bottom: 4rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Header de Sección */
+.text-gradient {
+  background: var(--gov-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: var(--gov-primary);
+  /* Fallback y color principal */
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+/* KPI Cards Rediseñados */
+.stat-card {
+  background: white;
+  border: 1px solid var(--gov-gray-200);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  height: 100%;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: var(--gov-secondary);
+  }
+
+  /* Barra lateral de color */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--gov-primary);
+  }
+
+  &.border-primary::before {
+    background: var(--gov-primary);
+  }
+
+  &.border-success::before {
+    background: var(--gov-success);
+  }
+
+  &.border-info::before {
+    background: var(--gov-accent);
+  }
+
+  &.border-warning::before {
+    background: var(--gov-warning);
+  }
+
+  .card-body {
+    padding: 0;
+  }
+
+  h6 {
+    color: var(--gov-gray-600);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    color: var(--gov-gray-900);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.025em;
+  }
+
+  small {
+    color: var(--gov-gray-600);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    i {
+      font-size: 1rem;
+    }
+  }
+
+  .icon-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gov-gray-50);
+    color: var(--gov-primary);
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  &:hover .icon-circle {
+    background: var(--gov-primary);
+    color: white;
+  }
+}
+
+/* Acciones Rápidas */
+.action-card {
+  background: white;
+  border: 1px solid var(--gov-gray-200);
+  border-radius: 0.75rem;
+  height: 100%;
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: var(--gov-secondary);
+  }
+
+  .card-body {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .icon-wrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    background: var(--gov-gray-50);
+    color: var(--gov-primary);
+    font-size: 2.5rem;
+    transition: all 0.3s ease;
+  }
+
+  &:hover .icon-wrapper {
+    background: var(--gov-primary);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  h5 {
+    color: var(--gov-gray-900);
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    color: var(--gov-gray-600);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .btn {
+    margin-top: auto;
+    width: 100%;
+    border-radius: 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stat-card h2 {
+    font-size: 1.75rem;
+  }
+
+  .action-card .card-body {
+    padding: 1.5rem;
+  }
+}
