@@ -10,6 +10,7 @@ db.Merchant = require('./Merchant')(sequelize, Sequelize);
 db.Truck = require('./Truck')(sequelize, Sequelize);
 db.Movement = require('./Movement')(sequelize, Sequelize);
 db.MovementItem = require('./MovementItem')(sequelize, Sequelize);
+db.Expense = require('./Expense')(sequelize, Sequelize);
 
 // Relaciones
 db.Merchant.hasMany(db.Truck, { foreignKey: 'merchant_id' });

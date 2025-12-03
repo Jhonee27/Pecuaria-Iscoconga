@@ -1,0 +1,35 @@
+{
+  "cochera": {
+    "moto": 2,
+    "auto": 5,
+    "camion": 50,
+    "trailer": 80,
+    "otro": 10
+  },
+  "animal": {
+    "vacuno": {
+      "default_price": 10,
+      "description": "Ganado vacuno"
+    },
+    "ovino": {
+      "default_price": 5,
+      "description": "Ganado ovino"
+    },
+    "porcino": {
+      "default_price": 8,
+      "description": "Ganado porcino"
+    },
+    "caprino": {
+      "default_price": 6,
+      "description": "Ganado caprino"
+    },
+    "equino": {
+      "default_price": 15,
+      "description": "Ganado equino"
+    },
+    "otro": {
+      "default_price": 5,
+      "description": "Otros animales"
+    }
+  }
+}

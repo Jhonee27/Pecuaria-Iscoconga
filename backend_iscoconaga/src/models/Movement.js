@@ -1,35 +1,61 @@
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('Movement', {
-    type: { 
-      type: DataTypes.ENUM('I', 'S'), 
-      allowNull: false, 
-      defaultValue: 'I' 
-    }, // solo ingresos
+    type: {
+      type: DataTypes.ENUM('I', 'S'),
+      allowNull: false,
+      defaultValue: 'I'
+    }, // I = Ingreso, S = Salida
 
-    merchant_id: { 
-      type: DataTypes.INTEGER, 
-      allowNull: false 
+    merchant_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
 
-    truck_id: { 
-      type: DataTypes.INTEGER, 
-      allowNull: true 
+    truck_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     },
 
-    total: { 
-      type: DataTypes.DECIMAL(12, 2), 
-      defaultValue: 0.0 
+    total: {
+      type: DataTypes.DECIMAL(12, 2),
+      defaultValue: 0.0
     },
 
-    note: { 
-      type: DataTypes.TEXT, 
-      allowNull: true 
+    note: {
+      type: DataTypes.TEXT,
+      allowNull: true
     },
 
-    // 👇 CAMBIO AQUÍ
-    date: { type: DataTypes.DATEONLY, allowNull: true, defaultValue: DataTypes.NOW }
+    date: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
+      defaultValue: DataTypes.NOW
+    },
 
-  }, { 
-    tableName: 'movements' 
+    // Campos de cochera
+    cochera_applied: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+
+    cochera_value: {
+      type: DataTypes.DECIMAL(12, 2),
+      defaultValue: 0.0
+    },
+
+    // Subtotal de animales (sin cochera)
+    subtotal_animals: {
+      type: DataTypes.DECIMAL(12, 2),
+      defaultValue: 0.0
+    },
+
+    // Verificación de salida
+    verified_exit: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
+
+  }, {
+    tableName: 'movements'
   });
 };

@@ -47,7 +47,7 @@ const PORT = process.env.PORT || 3000;
 
     // 4️⃣ Crear admin si no existe (solo en dev)
     if (process.env.NODE_ENV !== 'production') {
-      const adminEmail = process.env.ADMIN_EMAIL || 'admin@iscoconaga.com';
+      const adminEmail = process.env.ADMIN_EMAIL || 'admin@iscoconga.com';
       const adminPass = process.env.ADMIN_PASS || 'admin123';
       const adminUser = await db.User.findOne({ where: { email: adminEmail } });
       if (!adminUser) {
